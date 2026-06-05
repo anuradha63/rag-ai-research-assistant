@@ -13,26 +13,7 @@ Full-stack RAG app using FastAPI, React, LangChain, OpenAI embeddings, and Chrom
 - React frontend with document list and chat UI
 - REST APIs for upload, list, delete, clear, query, and health check
 
-## Project structure
-
-```txt
-rag-ai-research-assistant/
-  backend/
-    app/
-      main.py
-      rag_pipeline.py
-      models.py
-      __init__.py
-    requirements.txt
-    .env.example
-  frontend/
-    src/
-      App.jsx
-      main.jsx
-    index.html
-    package.json
-    .env.example
-```
+\
 
 ## Backend setup
 
