@@ -19,6 +19,7 @@ pymupdf==1.24.14
 
 # OpenAI
 openai==1.57.2
+langchain-google-genai
 
 # Utilities
 python-dotenv==1.0.1
