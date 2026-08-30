@@ -67,15 +67,15 @@ class RAGPipeline:
         separators=["\n\n", "\n", ". ", " ", ""],
     )
 
-     self.chroma_client = chromadb.PersistentClient(path=CHROMA_PERSIST_DIR)
-     self.vectorstore = Chroma(
+    self.chroma_client = chromadb.PersistentClient(path=CHROMA_PERSIST_DIR)
+    self.vectorstore = Chroma(
         client=self.chroma_client,
         collection_name=COLLECTION_NAME,
         embedding_function=self.embeddings,
         persist_directory=CHROMA_PERSIST_DIR,
     )
 
-      self._documents: dict[str, DocumentInfo] = self._load_documents()
+    self._documents: dict[str, DocumentInfo] = self._load_documents()
 
     def _load_documents(self) -> dict[str, DocumentInfo]:
         if not METADATA_FILE.exists():
