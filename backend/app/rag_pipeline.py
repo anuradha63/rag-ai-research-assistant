@@ -7,7 +7,7 @@ from typing import List, Optional
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_chroma import Chroma
 
 import chromadb
@@ -39,23 +39,27 @@ Answer:"""
 
 
 class RAGPipeline:
-    def __init__(self):
-        self.openai_api_key = os.getenv("OPENAI_API_KEY")
-        if not self.openai_api_key or self.openai_api_key == "your_openai_api_key_here":
-            raise ValueError("OPENAI_API_KEY environment variable not set. Add it in backend/.env")
+   def __init__(self):
+    self.gemini_api_key = os.getenv("GEMINI_API_KEY")
 
-        Path(CHROMA_PERSIST_DIR).mkdir(parents=True, exist_ok=True)
-
-        self.embeddings = OpenAIEmbeddings(
-            model="text-embedding-3-small",
-            openai_api_key=self.openai_api_key,
+    if not self.gemini_api_key:
+        raise ValueError(
+            "GEMINI_API_KEY environment variable not set. "
+            "Add it in Render Environment."
         )
 
-        self.llm = ChatOpenAI(
-            model="gpt-4o-mini",
-            temperature=0.1,
-            openai_api_key=self.openai_api_key,
-        )
+    Path(CHROMA_PERSIST_DIR).mkdir(parents=True, exist_ok=True)
+
+    self.embeddings = GoogleGenerativeAIEmbeddings(
+        model="models/gemini-embedding-001",
+        google_api_key=self.gemini_api_key,
+    )
+
+    self.llm = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
+        temperature=0.1,
+        google_api_key=self.gemini_api_key,
+    )
 
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
@@ -144,7 +148,7 @@ class RAGPipeline:
                 answer="No relevant information found in the indexed documents for your question.",
                 sources=[],
                 question=question,
-                model_used="gpt-4o-mini",
+                model_used="gemini-2.5-flash",
                 tokens_used=0,
             )
 
@@ -174,7 +178,7 @@ class RAGPipeline:
             answer=response.content,
             sources=sources,
             question=question,
-            model_used="gpt-4o-mini",
+            model_used="gemini-2.5-flash",
             tokens_used=usage.get("total_tokens"),
         )
 
